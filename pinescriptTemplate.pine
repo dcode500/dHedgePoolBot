@@ -1,0 +1,119 @@
+//Best for DeFi assets on 4 hour chart
+//  Updated by Dcode500
+//  Core trend code by Ankit_1618
+
+//@version=4
+//updated version
+study("DeFi Follow Line Trend Signal", overlay=false)
+
+
+
+// --- settings
+BBperiod      = input(21)
+BBdeviations  = input(2)
+ATRperiod     = input(14)
+UseATRfilter  = input(true)
+ATRmult       = input(3)
+PivotLength   = input(5)
+src = close
+// --- end of settings
+
+
+BBupper= sma(src, BBperiod) + stdev(src, BBperiod)*BBdeviations
+BBLower= sma(src, BBperiod) - stdev(src, BBperiod)*BBdeviations
+//-----------------------------------------------------------------------------------
+
+var BBSignal = 0
+var TrendLine = 0.
+
+if(close>BBupper)
+    BBSignal :=1
+
+if(close<BBLower)
+    BBSignal :=-1
+
+
+if(BBSignal>0)
+    if(UseATRfilter)
+        TrendLine :=low - atr(ATRperiod)
+
+    if(not UseATRfilter)
+        TrendLine :=low
+
+    if(TrendLine<TrendLine[1])
+        TrendLine :=TrendLine[1]
+
+
+//---
+if(BBSignal<0)
+    if(UseATRfilter)
+        TrendLine :=high + atr(ATRperiod)
+
+    if(not UseATRfilter)
+        TrendLine :=high
+
+    if(TrendLine>TrendLine[1])
+        TrendLine :=TrendLine[1]
+
+
+//---
+
+var iTrend= 0
+if(TrendLine>TrendLine[1])
+    iTrend :=1
+
+if(TrendLine<TrendLine[1])
+    iTrend :=-1
+
+t_color = iTrend >0 ? color.blue : color.red
+p1 = plot(TrendLine, color= t_color, linewidth=2, transp=60)
+
+//--------------------------------
+
+var pivot_high = 0.
+var pivot_low = 0.
+pivot_high := pivothigh(PivotLength, PivotLength)
+pivot_low := pivotlow(PivotLength, PivotLength)
+
+float median = na
+median := median[1]
+float last_pivot_point = pivot_high ? pivot_high : pivot_low ? pivot_low : na
+if last_pivot_point
+    if na(median)
+        median := last_pivot_point
+    else
+        median := (median * 2 + last_pivot_point) / 3
+
+upper_pivots = median - (ATRmult * atr(ATRperiod))
+lower_pivots = median + (ATRmult * atr(ATRperiod))
+
+float trend_upside = na
+float trend_downside = na
+Trend = 0
+trend_upside := close[1] > trend_upside[1] ? max(upper_pivots, trend_upside[1]) : upper_pivots
+trend_downside := close[1] < trend_downside[1] ? min(lower_pivots, trend_downside[1]) : lower_pivots
+Trend := close > trend_downside[1] ? 1: close < trend_upside[1]? -1: nz(Trend[1], 1)
+TrendLine2 = Trend == 1 ? trend_upside : trend_downside
+
+linecolor = Trend == 1 and nz(Trend[1]) == 1 ? color.lime : Trend == -1 and nz(Trend[1]) == -1 ? color.red : na
+p2 = plot(TrendLine2, color = linecolor ,  linewidth = 2, transp=60)
+
+_t_color = linecolor == color.lime and t_color == color.blue ? color.green : linecolor == color.red and t_color == color.red ? color.red : na
+_t_signal = linecolor == color.lime and t_color == color.blue ? 1 : linecolor == color.red and t_color == color.red ? -1 : 0
+fill(p1, p2, color = _t_color)
+
+buy = _t_signal == 1  and _t_signal[1] != 1
+sell = _t_signal == -1  and _t_signal[1] != -1
+signal1 = input(title="TrendSignal", type=input.integer, defval=0)
+
+//plotshape(buy, title="buy", text="", style=shape.triangleup, location=location.belowbar, size=size.small, color=color.green)
+//plotshape(sell, title="sell", text="", style=shape.triangledown, location=location.abovebar, size=size.small, color=color.red)
+
+
+if buy ==true
+    signal1 :=100
+
+if sell ==true
+    signal1 :=-100
+
+plot(signal1)
