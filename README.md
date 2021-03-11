@@ -1,4 +1,5 @@
-# dHedge Node.js Bot. Manages Portfolio and executes trades based on signals from TradingView Alert Webhooks powered by Pinescript Studies
+# dHedge Node.js Bot For Managing A Portfolio (Pool) and Executing Trades Based on Signals from TradingView Alert Webhooks powered by Pinescript Studies
+
 
 
 ## Introduction
@@ -14,17 +15,21 @@ This bot's URL should be help secret, so others don't trigger trades. This is be
 
 ## Quick Start
 
-Add your MNEMONIC phrase and RPC endpoint to the bot or it will not work!
+Make sure to npm install
 
-Update your tradeableUniverse variable
+Add your MNEMONIC phrase and RPC endpoint to the .env file or nothing will not work! For mainnet forking and tests Truffle Teams or Hard Hat is recommended.
 
-This uses a default pool address which will not work properly until you (If you aren't just going to import and already created pool ):
+Update your tradeableUniverse variable to have the list of assets you want to trade. This is case sensitive.
+
+For dHedge SDK docs, which this is built on top of, visit: https://github.com/dhedge/dhedge-sdk
+
+This uses a default pool address which will not work properly until you do the following (If you aren't just going to import and already created pool ):
 
 Call the endpoint (https://yourul.com/ or localhost:5000/) /poolcreate to get started
 
 And the /depositUSD?amount=1000 (Or however much USD you want to start with
 
-Now, just read the rest of the docs.
+Now, enjoy read the rest of the docs. If anything has been left out, leave a comment.
 
 
 ## Design Philosophy
