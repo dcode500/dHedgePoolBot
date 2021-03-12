@@ -15,7 +15,7 @@ This bot's URL should be help secret, so others don't trigger trades. This is be
 
 ## Quick Start
 
-Make sure to npm install
+Make sure to `npm install`
 
 Add your MNEMONIC phrase and RPC endpoint to the .env file or nothing will not work! For mainnet forking and tests Truffle Teams or Hard Hat is recommended.
 
@@ -29,12 +29,12 @@ Call the endpoint (https://yourul.com/ or localhost:5000/) /poolcreate to get st
 
 And the /depositUSD?amount=1000 (Or however much USD you want to start with
 
-Now, enjoy read the rest of the docs. If anything has been left out, leave a comment.
+The rest of the docs should guide you through how everything else works. If anything has been left out, please share is Issues.
 
 
 ## Design Philosophy
 
-Simplicity This node.js app was built with simplicity in mind and built to easily be deployed to a heroku or any other provider quickly and easily. All functions pretty much return like this in JSON format:
+Simplicity. This node.js app was built with simplicity in mind and built to easily be deployed to a heroku or any other provider quickly and easily. All functions pretty much return like this in JSON format:
 
 {"status":"success", "msg":"Some messaage", "data"{"info":"info"}}
 
@@ -55,7 +55,7 @@ Make sure you have ETH and sUSD in your account, or nothing will work (even if y
 Then, ping the /poolcreate endpoint sending the name and author params. This will setup your bot. If your bot stops running and is redeployed, you will need to call the setPoolAddress endpoint, so it can work.
 
 
-## SettingU Up The Alerts
+## Setting Up The Alerts & Pinescript on Tradingview to Trigger Trades
 
 Visit the chart page for any asset you are trading on Trading view.
 Under the chart, click on the Pine Editor tab. Then paste the pinescriptTemplate.pine file contents in the page. Save your code with a name, and then click "Add To Chart". This is a simple trend following strategy that works best in DeFi on the 4 hour periods.
